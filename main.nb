@@ -1,0 +1,258 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Wolfram 14.1' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       154,          7]
+NotebookDataLength[      9074,        248]
+NotebookOptionsPosition[      8258,        227]
+NotebookOutlinePosition[      8702,        244]
+CellTagsIndexPosition[      8659,        241]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", 
+   RowBox[{"Enviroment", " ", "Variables"}], "*)"}], "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"location", " ", "=", " ", 
+     TemplateBox[{"\"Paris\"", 
+       RowBox[{"Entity", "[", 
+         RowBox[{"\"City\"", ",", 
+           RowBox[{"{", 
+             RowBox[{"\"Paris\"", ",", "\"IleDeFrance\"", ",", "\"France\""}],
+              "}"}]}], "]"}], 
+       "\"Entity[\\\"City\\\", {\\\"Paris\\\", \\\"IleDeFrance\\\", \
+\\\"France\\\"}]\"", "\"city\""},
+      "Entity"]}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"ambulanceCount", " ", "=", " ", "50"}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"hospitalCount", " ", "=", " ", "10"}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"patientCount", " ", "=", " ", "1000"}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"previousAccidentCount", " ", "=", " ", "10000"}], ";"}], 
+   "\[IndentingNewLine]"}]}]], "Input",
+ CellChangeTimes->{{3.9365999500321236`*^9, 3.936600041090416*^9}, {
+  3.9366003195601025`*^9, 3.936600334695616*^9}},
+ CellLabel->"In[1]:=",ExpressionUUID->"fe89ec69-e4f6-6440-8d55-28349d17b3fd"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", 
+   RowBox[{"Data", " ", "-", " ", 
+    RowBox[{
+    "Cities", " ", "would", " ", "put", " ", "in", " ", "real", " ", 
+     "data"}]}], "*)"}], "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"ambulanceLocations", " ", "=", " ", 
+     RowBox[{"RandomGeoPosition", "[", 
+      RowBox[{"location", ",", "ambulanceCount"}], "]"}]}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"hospitalLocations", " ", "=", " ", 
+     RowBox[{"RandomGeoPosition", "[", 
+      RowBox[{"location", ",", "hospitalCount"}], "]"}]}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"patientLocations", " ", "=", " ", 
+     RowBox[{"RandomGeoPosition", "[", 
+      RowBox[{"location", ",", "patientCount"}], "]"}]}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"previousAccidentLocations", " ", "=", " ", 
+     RowBox[{"RandomGeoPosition", "[", 
+      RowBox[{"location", ",", "previousAccidentCount"}], "]"}]}], ";"}], 
+   "\[IndentingNewLine]", "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"ambulancePoints", " ", "=", " ", 
+     RowBox[{"ambulanceLocations", "[", 
+      RowBox[{"[", "1", "]"}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"hospitalPoints", " ", "=", " ", 
+     RowBox[{"hospitalLocations", "[", 
+      RowBox[{"[", "1", "]"}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"patientPoints", " ", "=", " ", 
+     RowBox[{"patientLocations", "[", 
+      RowBox[{"[", "1", "]"}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"previousAccidentPoints", " ", "=", " ", 
+     RowBox[{"previousAccidentLocations", "[", 
+      RowBox[{"[", "1", "]"}], "]"}]}], ";"}]}]}]], "Input",
+ CellChangeTimes->{{3.936600115019911*^9, 3.936600348613962*^9}, {
+  3.9366005072619267`*^9, 3.9366006183224773`*^9}},
+ CellLabel->"In[6]:=",ExpressionUUID->"2e650253-88e1-e343-88d9-1f5cf102508a"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", 
+   RowBox[{"Planning", " ", "Ambulance", " ", "Locations"}], "*)"}], 
+  "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"patientCluster", " ", "=", " ", 
+     RowBox[{"FindClusters", "[", 
+      RowBox[{"patientPoints", ",", " ", "ambulanceCount", ",", " ", 
+       RowBox[{"Method", "->", "\"\<KMeans\>\""}]}], "]"}]}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"patientClusterCentroids", " ", "=", " ", 
+     RowBox[{"Mean", "/@", "patientCluster"}]}], ";"}], "\[IndentingNewLine]",
+    "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"haversine", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"lat1_", ",", "lon1_"}], "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"lat2_", ",", "lon2_"}], "}"}]}], "]"}], ":=", 
+    "\[IndentingNewLine]", 
+    RowBox[{"Module", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"r", "=", "6371"}], ",", "dLat", ",", "dLon", ",", "a", ",", 
+        "c"}], "}"}], ",", 
+      RowBox[{
+       RowBox[{"dLat", "=", 
+        RowBox[{
+         RowBox[{"(", 
+          RowBox[{"lat2", "-", "lat1"}], ")"}], " ", "Degree"}]}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{"dLon", "=", 
+        RowBox[{
+         RowBox[{"(", 
+          RowBox[{"lon2", "-", "lon1"}], ")"}], " ", "Degree"}]}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{"a", "=", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"Sin", "[", 
+           RowBox[{"dLat", "/", "2"}], "]"}], "^", "2"}], "+", 
+         RowBox[{
+          RowBox[{"Cos", "[", 
+           RowBox[{"lat1", " ", "Degree"}], "]"}], " ", 
+          RowBox[{"Cos", "[", 
+           RowBox[{"lat2", " ", "Degree"}], "]"}], " ", 
+          RowBox[{
+           RowBox[{"Sin", "[", 
+            RowBox[{"dLon", "/", "2"}], "]"}], "^", "2"}]}]}]}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{"c", "=", 
+        RowBox[{"2", " ", 
+         RowBox[{"ArcTan", "[", 
+          RowBox[{
+           RowBox[{"Sqrt", "[", "a", "]"}], ",", 
+           RowBox[{"Sqrt", "[", 
+            RowBox[{"1", "-", "a"}], "]"}]}], "]"}]}]}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{"r", " ", "c"}]}]}], "]"}]}], "\[IndentingNewLine]", 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"findClosestCentroid", "[", 
+     RowBox[{"accident_", ",", "centroids_"}], "]"}], ":=", 
+    "\[IndentingNewLine]", 
+    RowBox[{"First", "@", 
+     RowBox[{"Ordering", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{
+         RowBox[{"haversine", "[", 
+          RowBox[{"accident", ",", "#"}], "]"}], "&"}], "/@", "centroids"}], 
+       ",", "1"}], "]"}]}]}], "\[IndentingNewLine]", "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"centroidCounts", "=", 
+     RowBox[{"ConstantArray", "[", 
+      RowBox[{"0", ",", 
+       RowBox[{"Length", "[", "centroids", "]"}]}], "]"}]}], ";"}], 
+   "\[IndentingNewLine]", "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"Do", "[", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"closest", "=", 
+        RowBox[{"findClosestCentroid", "[", 
+         RowBox[{"accident", ",", "patientClusterCentroids"}], "]"}]}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{
+        RowBox[{"centroidCounts", "[", 
+         RowBox[{"[", "closest", "]"}], "]"}], "++"}]}], ",", 
+      RowBox[{"{", 
+       RowBox[{"accident", ",", "accidentPoints"}], "}"}]}], "]"}], ";"}], 
+   "\[IndentingNewLine]", "\[IndentingNewLine]", 
+   "centroidCounts"}]}]], "Input",
+ CellChangeTimes->{
+  3.9366006586648254`*^9, {3.9366007140468807`*^9, 3.9366007823547153`*^9}, {
+   3.936601103966316*^9, 3.93660110969405*^9}, {3.9366011650701866`*^9, 
+   3.9366012273694363`*^9}, {3.936601505633444*^9, 3.936601588149132*^9}, {
+   3.9366022588272877`*^9, 3.9366022606070595`*^9}},
+ CellLabel->"In[28]:=",ExpressionUUID->"8e5c29d9-5ecb-5d42-81f5-d5d6fc89db02"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "Do", "iterb", 
+   "\"Iterator \\!\\(\\*RowBox[{\\\"{\\\", RowBox[{\\\"accident\\\", \
+\\\",\\\", \\\"accidentPoints\\\"}], \\\"}\\\"}]\\) does not have appropriate \
+bounds.\"", 2, 33, 3, 21312763215341386841, "Local"},
+  "MessageTemplate"]], "Message", "MSG",
+ CellChangeTimes->{
+  3.936601602206684*^9, {3.936602266857031*^9, 3.9366022751548195`*^9}},
+ CellLabel->
+  "During evaluation of \
+In[28]:=",ExpressionUUID->"08a53ad5-db49-304e-881c-21f9011f5535"],
+
+Cell[BoxData[
+ RowBox[{"{", "}"}]], "Output",
+ CellChangeTimes->{
+  3.936601602302906*^9, {3.9366022668680477`*^9, 3.936602275162836*^9}},
+ CellLabel->"Out[34]=",ExpressionUUID->"28c453ba-9429-6f4d-9a02-6ba796934018"]
+}, Open  ]]
+},
+WindowSize->{1440, 741.75},
+WindowMargins->{{-6, Automatic}, {Automatic, -6}},
+TaggingRules-><|"TryRealOnly" -> False|>,
+FrontEndVersion->"14.1 for Microsoft Windows (64-bit) (July 16, 2024)",
+StyleDefinitions->"Default.nb",
+ExpressionUUID->"77c58457-14e2-e241-aa0e-55daf4277625"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[554, 20, 1186, 30, 151, "Input",ExpressionUUID->"fe89ec69-e4f6-6440-8d55-28349d17b3fd"],
+Cell[1743, 52, 1916, 46, 199, "Input",ExpressionUUID->"2e650253-88e1-e343-88d9-1f5cf102508a"],
+Cell[CellGroupData[{
+Cell[3684, 102, 3845, 103, 389, "Input",ExpressionUUID->"8e5c29d9-5ecb-5d42-81f5-d5d6fc89db02"],
+Cell[7532, 207, 490, 11, 26, "Message",ExpressionUUID->"08a53ad5-db49-304e-881c-21f9011f5535"],
+Cell[8025, 220, 217, 4, 32, "Output",ExpressionUUID->"28c453ba-9429-6f4d-9a02-6ba796934018"]
+}, Open  ]]
+}
+]
+*)
+
+(* End of internal cache information *)
+
